@@ -1,0 +1,39 @@
+map_mp_promo_feasel1_art	ShrinkZone
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+  The world is revealed permanently for Player 'Player_1'.
+
+
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+    *AND*  Object '<This Object>' is of type or type list. '_object list_japan all units'
+  *** OR ***
+    Map is running in Commander's Challenge Mode.
+    *AND*  Object '<This Object>' is of type or type list. '_object list_allied all units'
+  *** OR ***
+    Map is running in Commander's Challenge Mode.
+    *AND*  Object '<This Object>' is of type or type list. '_object list_soviet all units'
+*** THEN ***
+   Object 'UNIT - CryoShrinker' use Ability 'Command_AlliedSupportAircraftShrinkRay' on Object '<This Object>'.
+
+
+
+
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+   Player 'Player_1' allowed to build 'alliedscoutinfantry' is false.	dog
+   Player 'Player_1' allowed to build 'sovietscoutinfantry' is false.	bear
+   Player 'Player_1' allowed to build 'alliedantinavalscout' is false.	dolphin
+   Player 'Player_1' allowed to build 'alliedgunshipaircraft' is false.	harbinger
+   Player 'Player_1' allowed to build 'japanfortressshipegg' is false.	gigafortress
+
+   Player 'Player_2' allowed to build 'alliedscoutinfantry' is false.
+   Player 'Player_2' allowed to build 'sovietscoutinfantry' is false.
+   Player 'Player_2' allowed to build 'alliedantinavalscout' is false.
+   Player 'Player_2' allowed to build 'alliedgunshipaircraft' is false.
+   Player 'Player_2' allowed to build 'japanfortressshipegg' is false.
+
+   Player 'Player_1' allowed to build 'japanlighttransportvehicle' is false.	sudden transport
+   Player 'Player_2' allowed to build 'japanlighttransportvehicle' is false.
