@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Commanders Challenge</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: lightgray;
+            color: black;
+        }
+
+        header {
+            background: #000;
+            color: white;
+            text-align: center;
+            padding: 32px 16px;
+        }
+
+        header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #maps {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .map {
+            background: white;
+            margin-bottom: 32px;
+            padding: 16px;
+            border-radius: 6px;
+
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .map img {
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        .map h2 {
+            margin-top: 0;
+        }
+
+        .meta {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 16px;
+        }
+
+        .description h3 {
+            margin-top: 0;
+        }
+
+        .toggle-script {
+            margin: 16px 0 8px;
+            padding: 8px 12px;
+            background: #222;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .toggle-script:hover {
+            background: #444;
+        }
+
+        .script {
+            background: #111;
+            color: #0f0;
+            padding: 12px;
+            overflow-x: auto;
+            white-space: pre;
+            border-radius: 4px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .map {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/24800/header.jpg?t=1741704725">
+        <h1>Command & Conquer: Red Alert 3 – Uprising</h1>
+        <p>Commander’s Challenge – Map Scripts & Analysis</p>
+    </header>
+
+    <div id="maps"></div>
+
+    <script>
+        const maps = [
+            {
+                title: "Dead Meat",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_2_feasel4_ep1_art.jpg",
+                meta: "map_cc_2_feasel4_ep1<br>Allies – Hill",
+
+                summary: `
+            <h3>Script Behavior (Human Readable)</h3>
+            <p>
+                This mission relies heavily on scripted dog encounters to build
+                tension, provide early scouting pressure, and delay full AI control.
+            </p>
+
+            <h4>Dogs – A (Intro Gag)</h4>
+            <ul>
+                <li>Two dogs are shrunk immediately.</li>
+                <li>After 10 seconds, they flee along a path and despawn.</li>
+            </ul>
+
+            <h4>Dogs – B (Delayed Dolphin Harass)</h4>
+            <ul>
+                <li>Dolphins attack after 3 minutes.</li>
+                <li>They are later shrunk, retreat, and are removed.</li>
+            </ul>
+
+            <h4>Dogs – C (Scouting Dogs)</h4>
+            <ul>
+                <li>Dogs enter one at a time.</li>
+                <li>Briefly reveal fog of war.</li>
+                <li>Play audio cues before retreating.</li>
+            </ul>
+
+            <h4>Dogs – D (Paradrop Ambush)</h4>
+            <ul>
+                <li>Dogs are paradropped with radar warnings.</li>
+                <li>They switch to Skirmish AI and hunt the player.</li>
+            </ul>
+        `,
+
+                script: `
+Dogs - A
+    Dogs - A - Setup
+        *** IF ***
+            True.
+        *** THEN ***
+            Object 'UNIT - Shrinker' use Ability 'Command_AlliedSupportAircraftShrinkRay' on Object 'UNIT - Dog A01'.
+            Object 'UNIT - Shrinker' use Ability 'Command_AlliedSupportAircraftShrinkRay' on Object 'UNIT - Dog A03'.
+            Set 'TIMER - Dogs - A' to expire in 10.00 seconds.
+<hr>
+    Dogs - A - Reference
+        *** IF ***
+            Timer 'TIMER - Dogs - A' has expired.
+        *** THEN ***
+            for each member of Team 'Player_2/TEAM - Dogs A' run Script 'Dogs - A - Run & Delete' .
+<hr>
+    Dogs - A - Run & Delete
+        *** IF ***
+            True.
+        *** THEN ***
+            Object '<This Object>' follow Waypoint Path 'PATH - Dog A' starting at Waypoint 'Waypoint 5'
+            Object '<This Object>' is removed from the world.
+<hr>
+    Dogs - A - Whine
+        *** IF ***
+            Object 'UNIT - Dog A03' is inside  area 'AREA - Dog A - Whine'
+        *** THEN ***
+            Sound 'ALL_Dog_VoiceMove' plays as though coming from Object 'UNIT - Dog A03'
+<hr>
+Dogs - B
+    Dogs - B - Setup
+        *** IF ***
+            True.
+        *** THEN ***
+            Set 'TIMER - Dogs - B' to expire in 180.00 seconds.
+            Set 'TIMER - Dogs - B (Shrunk)' to expire in 183.00 seconds.
+<hr>
+    Dogs - B - Dolphin 01
+        *** IF ***
+            Timer 'TIMER - Dogs - B' has expired.
+        *** THEN ***
+            Move Object 'UNIT - Dolphin A01' to Waypoint 'WP - Sea Enter'.
+            Move Object 'UNIT - Dolphin A01' to Waypoint 'WP - Dolphin A01 - 01'.
+            Object 'UNIT - Dolphin A01' use Ability 'Command_ActivateJumpSpecialPower' at Waypoint 'WP - Dolphin A01 - 02'.
+            Move Object 'UNIT - Dolphin A01' to Waypoint 'WP - Dolphin A01 - 03'.
+            Object 'UNIT - Dolphin A01' AttackMove follows waypoints, beginning at Waypoint Path 'PATH - Dolphin A'
+<hr>
+    Dogs - B - Dolphin 02
+        *** IF ***
+            Timer 'TIMER - Dogs - B' has expired.
+        *** THEN ***
+            Move Object 'UNIT - Dolphin A02' to Waypoint 'WP - Sea Enter'.
+            Move Object 'UNIT - Dolphin A02' to Waypoint 'WP - Dolphin A02 - 01'.
+            Object 'UNIT - Dolphin A02' use Ability 'Command_ActivateJumpSpecialPower' at Waypoint 'WP - Dolphin A02 - 02'.
+            Move Object 'UNIT - Dolphin A02' to Waypoint 'WP - Dolphin A02 - 03'.
+            Object 'UNIT - Dolphin A02' AttackMove follows waypoints, beginning at Waypoint Path 'PATH - Dolphin A'
+<hr>
+    Dogs - B - Reference
+    *** IF ***
+        Timer 'TIMER - Dogs - B (Shrunk)' has expired.
+    *** THEN ***
+        for each member of Team 'Player_2/TEAM - Dolphins B' run Script 'Dogs - B - Dolphin Shrink & Go' .
+<hr>
+    Dogs - B - Dolphin Shrink & Go
+    *** IF ***
+        Timer 'TIMER - Dogs - B (Shrunk)' has expired.
+    *** THEN ***
+        Object 'UNIT - Shrinker' use Ability 'Command_AlliedSupportAircraftShrinkRay' on Object '<This Object>'.
+        Move Object '<This Object>' to Waypoint 'WP - Sea Enter'.
+        Object '<This Object>' use Ability 'Command_ActivateJumpSpecialPower' at Waypoint 'WP - Dolphins - B02'.
+        Object '<This Object>' follow Waypoint Path 'PATH - Dolphins B' starting at Waypoint 'Waypoint 38'
+        Object '<This Object>' is removed from the world.
+<hr>
+Dogs - C
+    Dogs - C - Setup
+    *** IF ***
+        True.
+    *** THEN ***
+        Set 'TIMER - Dogs - C' to expire in 75.00 seconds.
+        Set 'TIMER - Dogs - C01' to expire in 100.00 seconds.
+        Set 'TIMER - Dogs - C02' to expire in 103.00 seconds.
+        Set 'TIMER - Dogs - C03' to expire in 105.00 seconds.
+        Set 'TIMER - Dogs - C04' to expire in 107.00 seconds.
+        Set 'TIMER - Dogs - C05' to expire in 109.00 seconds.
+<hr>
+    Dogs - C - C01
+    *** IF ***
+        Timer 'TIMER - Dogs - C01' has expired.
+    *** THEN ***
+        Move Object '<This Object>' to Waypoint 'WP - C On Map'.
+        AttackMove Object '<This Object>' to Waypoint 'WP - C01'.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to true.
+        Object '<This Object>' idles for  1  seconds.
+        Play Sound 'ALL_Dog_Howl' at Waypoint 'WP - C05'.
+        Object '<This Object>' idles for  2  seconds.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to false.
+        AttackMove Object '<This Object>' to Waypoint 'WP - Dog Retreat'.
+        Turn Skirmish AI for Object '<This Object>' On
+<hr>
+    Dogs - C - C02
+    *** IF ***
+        Timer 'TIMER - Dogs - C02' has expired.
+    *** THEN ***
+        Move Object '<This Object>' to Waypoint 'WP - C On Map'.
+        AttackMove Object '<This Object>' to Waypoint 'WP - C02'.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to true.
+        Object '<This Object>' idles for  1  seconds.
+        Play Sound 'ALL_Dog_Howl' at Waypoint 'WP - C05'.
+        Object '<This Object>' idles for  2  seconds.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to false.
+        AttackMove Object '<This Object>' to Waypoint 'WP - Dog Retreat'.
+        Turn Skirmish AI for Object '<This Object>' On
+<hr>
+    Dogs - C - C03
+    *** IF ***
+        Timer 'TIMER - Dogs - C03' has expired.
+    *** THEN ***
+        Move Object '<This Object>' to Waypoint 'WP - C On Map'.
+        AttackMove Object '<This Object>' to Waypoint 'WP - C03'.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to true.
+        Play Sound 'ALL_Dog_VoiceMoveAttack' at Waypoint 'WP - C05'.
+        Object '<This Object>' idles for  1  seconds.
+        Play Sound 'ALL_Dog_Howl' at Waypoint 'WP - C05'.
+        Object '<This Object>' idles for  2  seconds.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to false.
+        AttackMove Object '<This Object>' to Waypoint 'WP - Dog Retreat'.
+        Turn Skirmish AI for Object '<This Object>' On
+<hr>
+    Dogs - C - C04
+    *** IF ***
+        Timer 'TIMER - Dogs - C04' has expired.
+    *** THEN ***
+        Move Object '<This Object>' to Waypoint 'WP - C On Map'.
+        AttackMove Object '<This Object>' to Waypoint 'WP - C04'.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to true.
+        Play Sound 'ALL_Dog_VoiceMoveAttack' at Waypoint 'WP - C04'.
+        Object '<This Object>' idles for  1  seconds.
+        Play Sound 'ALL_Dog_Howl' at Waypoint 'WP - C05'.
+        Object '<This Object>' idles for  2  seconds.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to false.
+        AttackMove Object '<This Object>' to Waypoint 'WP - Dog Retreat'.
+        Turn Skirmish AI for Object '<This Object>' On
+<hr>
+    Dogs - C - C05
+    *** IF ***
+        Timer 'TIMER - Dogs - C05' has expired.
+    *** THEN ***
+        Move Object '<This Object>' to Waypoint 'WP - C On Map'.
+        AttackMove Object '<This Object>' to Waypoint 'WP - C05'.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to true.
+        Object '<This Object>' idles for  1  seconds.
+        Play Sound 'ALL_Dog_Howl' at Waypoint 'WP - C05'.
+        Object '<This Object>' idles for  2  seconds.
+        For Object '<This Object>' set Object Status is 'SHROUD_REVEAL_TO_ALL' to false.
+        AttackMove Object '<This Object>' to Waypoint 'WP - Dog Retreat'.
+        Turn Skirmish AI for Object '<This Object>' On
+<hr>
+Dogs - D
+    Dogs - D - Setup
+    *** IF ***
+        True.
+    *** THEN ***
+        Set 'TIMER - Dogs - D01' to expire in 260.00 seconds.
+        Set 'TIMER - Dogs - D02' to expire in 262.00 seconds.
+        Team 'Player_2/TEAM - Dogs D01' garrison's Object 'UNIT - Century 01' instantly.
+        Team 'Player_2/TEAM - Dogs D02' garrison's Object 'UNIT - Century 02' instantly.
+<hr>
+   Dogs - D - D01
+    *** IF ***
+        Timer 'TIMER - Dogs - D01' has expired.
+    *** THEN ***
+        Move Object 'UNIT - Century 01' to Waypoint 'WP - Paradrop 01'.
+        Object 'UNIT - Century 01' use Ability 'Command_ActivateEjectPassengersSpecialPowerUntargeted'.
+        A radar event occurs at (830.00,660.00,0.00) of type Information
+        Set 'TIMER - Dogs - D - Hunt' to expire in 12.00 seconds.
+        Move Object 'UNIT - Century 01' to Waypoint 'WP - Century - Delete 01'.
+        Object 'UNIT - Century 01' is removed from the world.
+<hr>
+    Dogs - D - D02
+    *** IF ***
+        Timer 'TIMER - Dogs - D02' has expired.
+    *** THEN ***
+        Move Object 'UNIT - Century 02' to Waypoint 'WP - Paradrop 02'.
+        Object 'UNIT - Century 02' use Ability 'Command_ActivateEjectPassengersSpecialPowerUntargeted'.
+        A radar event occurs at (820.00,860.00,0.00) of type Information
+        Move Object 'UNIT - Century 02' to Waypoint 'WP - Century 02 - Delete'.
+        Object 'UNIT - Century 02' is removed from the world.
+<hr>
+    Dogs - D - Hunt
+    *** IF ***
+        Timer 'TIMER - Dogs - D - Hunt' has expired.
+    *** THEN ***
+        Team 'Player_2/TEAM - Dogs D01' begins hunting.
+        Team 'Player_2/TEAM - Dogs D02' begins hunting.
+        Set 'TIMER - Dogs - D - AI' to expire in 10.00 seconds.
+<hr>
+    Dogs - D - AI
+    *** IF ***
+        Timer 'TIMER - Dogs - D - AI' has expired.
+    *** THEN ***
+        Turn Skirmish AI for Team 'Player_2/TEAM - Dogs D01' On
+        Turn Skirmish AI for Team 'Player_2/TEAM - Dogs D02' On
+        `
+            },
+
+            {
+                title: "No Place to Hide",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_2_schafeamon1_ep1_art.jpg",
+                meta: "map_cc_2_schafeamon1_ep1<br>Allies – Giles",
+                summary: `
+        <h3>Script Behavior (Human Readable)</h3>
+        <p>
+            This map uses faction detection to spawn starting anti-infantry units
+            for the player, and includes two taunt audio triggers based on enemy
+            infiltration presence.
+        </p>
+
+        <h4>Key Events</h4>
+        <ul>
+            <li><b>Guard Team 6</b> hunts the player if attacked.</li>
+            <li><b>Starting Units</b> are spawned depending on player faction:
+                <ul>
+                    <li>Japan, Soviet, or Allies each spawn 3 anti-infantry units.</li>
+                    <li>If the player is not that faction, a flag is set.</li>
+                </ul>
+            </li>
+            <li><b>Two taunts</b> play when enemy infiltrators enter the trigger area.</li>
+        </ul>
+    `,
+                script: `
+        Guard Team 6 Response
+        *** IF ***
+            Team 'Player_2/Guard Team 6' has been attacked by Player 'Player_1'
+        *** THEN ***
+            Team 'Player_2/Guard Team 6' begins hunting.
+<hr>
+        Starting Units - Japan
+        *** IF ***
+            Player 'Player_1' has Greater Than or Equal To  1  object of type 'japanmcv'.
+        *** OR ***
+            Player 'Player_1' has Greater Than or Equal To  1  object of type 'japanconstructionyard'.
+        *** THEN ***
+            Spawn unit of type 'japanantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 01', rotated 45.00 degrees.
+            Spawn unit of type 'japanantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 02', rotated 45.00 degrees.
+            Spawn unit of type 'japanantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 03', rotated 45.00 degrees.
+        *** ELSE ***
+            Set Flag named 'FLAG - Player Is Not Japan' to true
+<hr>
+        Starting Units - Soviet
+        *** IF ***
+            Player 'Player_1' has Greater Than or Equal To  1  object of type 'sovietmcv'.
+        *** OR ***
+            Player 'Player_1' has Greater Than or Equal To  1  object of type 'sovietconstructionyard'.
+        *** THEN ***
+            Spawn unit of type 'sovietantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 01', rotated 45.00 degrees.
+            Spawn unit of type 'sovietantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 02', rotated 45.00 degrees.
+            Spawn unit of type 'sovietantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 03', rotated 45.00 degrees.
+        *** ELSE ***
+            Set Flag named 'FLAG - Player Is Not Soviet' to true
+<hr>
+        Starting Units - Allies
+        *** IF ***
+            Player 'Player_1' has Greater Than or Equal To  1  object of type 'alliedmcv'.
+        *** OR ***
+            Player 'Player_1' has Greater Than or Equal To  1  object of type 'alliedconstructionyard'.
+        *** THEN ***
+            Spawn unit of type 'alliedantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 01', rotated 45.00 degrees.
+            Spawn unit of type 'alliedantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 02', rotated 45.00 degrees.
+            Spawn unit of type 'alliedantiinfantryinfantry' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Unit 03', rotated 45.00 degrees.
+        *** ELSE ***
+            Set Flag named 'FLAG - Player Is Not Allies' to true
+<hr>
+        First Taunt
+        *** IF ***
+            Player 'Player_2' has Greater Than or Equal To  1  object of type 'alliedinfiltrationinfantry' in the  area 'Taunt Trigger'.
+        *** THEN ***
+            'CH11GI02' plays in the radar window.
+            Set 'Taunt Delay' to expire in 180.00 seconds.
+<hr>
+        Second Taunt
+        *** IF ***
+            Timer 'Taunt Delay' has expired.
+            *AND*  Player 'Player_2' has Greater Than or Equal To  1  object of type 'alliedinfiltrationinfantry' in the  area 'Taunt Trigger'.
+        *** THEN ***
+            'CH11GI03' plays in the radar window.
+        `
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_4_feasel7_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "Tesla's Castle",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_4_feasel11_ep1_art.jpg",
+                meta: "map_cc_4_feasel11_ep1<br>Soviets - Moskvin",
+                summary: `
+    <h3>Script Behavior (Human Readable)</h3>
+    <p>
+      Tesla’s Castle is a heavily scripted map focused on limiting the player’s
+      building options, forcing a specific faction playstyle, and creating
+      constant pressure through patrols and Tesla-themed harassment.
+    </p>
+
+        <h3>Restrictions (Friendly Names)</h3>
+        <div class="restrictions">
+          <strong>Allied Restrictions</strong>
+          <ul>
+            <li>Allied Naval Yard</li>
+            <li>Allied Anti-Ground Aircraft</li>
+            <li>Allied Bomber Aircraft</li>
+            <li>Allied Fighter Aircraft</li>
+            <li>Allied Gunship Aircraft</li>
+            <li>Allied Support Aircraft</li>
+          </ul>
+
+          <strong>Japan Restrictions</strong>
+          <ul>
+            <li>Japan Naval Yard</li>
+            <li>Japan Anti-Vehicle Infantry (Tech 3)</li>
+            <li>Japan Anti-Air Vehicle (Tech 1)</li>
+            <li>Japan Anti-Infantry Vehicle</li>
+          </ul>
+
+          <strong>Soviet Restrictions</strong>
+          <ul>
+            <li>Soviet Airfield</li>
+            <li>Soviet Naval Yard</li>
+          </ul>
+        </div>
+      </div>
+
+    <h4>What the script does</h4>
+    <ul>
+      <li><b>Build restrictions</b> disable key unit types for Allies, Japan, and Soviets.</li>
+      <li><b>Allegiances</b> set Player 1 and Player 2 as enemies, and Player 4 as neutral.</li>
+      <li><b>Patrol AI</b> sends multiple enemy teams along patrol paths.</li>
+      <li><b>EMP behavior</b> causes Tesla troops to toggle Short Circuit (EMP) constantly.</li>
+      <li><b>Tesla Boats</b> spawn after 5 minutes and attack the player.</li>
+      <li><b>Harassment units</b> randomly choose civilian targets and move toward them while EMP is active.</li>
+    </ul>
+  `,
+                script: `
+Restrict Allied Structures
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'alliednavalyard' is false.
+
+Restrict Allied Units
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'alliedantigroundaircraft' is false.
+   Player '<1st Human Player>' allowed to build 'alliedbomberaircraft' is false.
+   Player '<1st Human Player>' allowed to build 'alliedfighteraircraft' is false.
+   Player '<1st Human Player>' allowed to build 'alliedgunshipaircraft' is false.
+   Player '<1st Human Player>' allowed to build 'alliedsupportaircraft' is false.
+
+Restrict Japan Structures
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'japannavalyardegg' is false.
+
+Restrict Japan Units
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'japanantivehicleinfantrytech3' is false.
+   Player '<1st Human Player>' allowed to build 'japanantiairvehicletech1' is false.
+   Player '<1st Human Player>' allowed to build 'japanantiinfantryvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'japannavalyardegg' is false.
+
+Restrict Soviet Structures
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'sovietairfield' is false.
+   Player '<1st Human Player>' allowed to build 'sovietnavalyard' is false.
+
+Allegiances
+*** IF ***
+    True.
+*** THEN ***
+   Player 'Player_1' considers Player 'Player_2' to be Relation 'Enemy'
+   Player 'Player_2' considers Player 'Player_1' to be Relation 'Enemy'
+   Player 'Player_2' considers Player 'Player_4' to be Relation 'Neutral'
+   Player 'Player_4' considers Player 'Player_2' to be Relation 'Neutral'
+
+Patrols
+*** IF ***
+    True.
+*** THEN ***
+  Have Team 'Player_2/TEAM - Tanks A' AttackMove along Waypoint Path 'PATH - Tanks A' , as a team is false , in formation is false
+  Have Team 'Player_2/TEAM - Tanks B' AttackMove along Waypoint Path 'PATH - Tanks B' , as a team is false , in formation is false
+  Have Team 'Player_2/TEAM - Troopers B' AttackMove along Waypoint Path 'PATH - Troopers B' , as a team is false , in formation is false
+  Have Team 'Player_2/TEAM - Troopers C' AttackMove along Waypoint Path 'PATH - Troopers C' , as a team is false , in formation is false
+  Have Team 'Player_2/TEAM - Troopers D' AttackMove along Waypoint Path 'TEAM - Troopers D' , as a team is false , in formation is false
+  Have Team 'Player_2/TEAM - Tesla E' AttackMove along Waypoint Path 'PATH - Patrol E' , as a team is false , in formation is false
+
+Static - Use EMP
+*** IF ***
+    True.
+*** THEN ***
+   Team 'Player_2/TEAM - Troopers A' use Ability 'Command_ToggleShortCircuit'.
+
+Static - Event
+*** IF ***
+     Object '<This Object>' is of type or type list. 'sovietantivehiclevehicletech2'
+  *** OR ***
+     Object '<This Object>' is of type or type list. 'sovietheavyantivehicleinfantry'
+*** THEN ***
+   Object '<This Object>' executes a copy of Script 'Static - Attack' sequentially.
+
+Static - Attack
+*** IF ***
+     Object '<This Object>' has Object Status is 'USING_ABILITY'
+*** THEN ***
+   Object '<This Object>' use Ability 'Command_ToggleShortCircuit'.
+   Object '<This Object>' begins hunting.
+*** ELSE ***
+   Object '<This Object>' begins hunting.
+
+Tesla Boats - Spawn
+*** IF ***
+    True.
+*** THEN ***
+  Spawn an instance of Team 'Player_2/TEAM - Tesla Boats' at Waypoint 'WP - Tesla Boat Spawner'.
+
+Tesla Boat - Setup
+*** IF ***
+    True.
+*** THEN ***
+  Set 'TIMER - Tesla Boats - Start' to expire in 300.00 seconds.
+
+Tesla Boats - Attack
+*** IF ***
+    Timer 'TIMER - Tesla Boats - Start' has expired.
+*** THEN ***
+  Move Team '<This Team>' to Waypoint 'WP - Tesla Boat Move'.
+  AttackMove Team '<This Team>' to Waypoint 'Player_1_Start'.
+   Team '<This Team>' begins hunting.
+
+Tesla Harassment - Setup
+*** IF ***
+    True.
+*** THEN ***
+   Team 'Player_2/TEAM - Troopers Harassment' use Ability 'Command_ToggleShortCircuit'.
+  Sets Team 'Player_2/TEAM - Troopers Harassment' stance to Stance: HOLD_FIRE.
+
+Tesla - Harassment - Reference
+*** IF ***
+    True.
+*** THEN ***
+  Set Object Reference 'REFERENCE - Harasser' to random member of Team 'Player_2/TEAM - Troopers Harassment'.
+  Set Object Reference 'REFERENCE - GoTo' to random member of Team 'PlyrCivilian/TEAM - Harass Widget'.
+   Object 'REFERENCE - Harasser' executes a copy of Script 'Tesla - Harassment - Move' sequentially.
+
+Tesla - Harassment - Move
+*** IF ***
+    True.
+*** THEN ***
+   Object '<This Object>' use Ability 'Command_ToggleShortCircuit'.
+   Object '<This Object>' idles for  1  seconds.
+  Move Object '<This Object>' to Object 'REFERENCE - GoTo'. Should attack move false.
+   Object '<This Object>' idles for  1  seconds.
+   Object '<This Object>' use Ability 'Command_ToggleShortCircuit'.
+`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_4_schafeamon1_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_5_schafeamon1_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel1_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel2_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "No Match for the Guardian",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel2_ep1_art.jpg",
+                meta: "map_mp_2_feasel2_ep1<br>Allies - Hill",
+                summary: `
+            <p>
+                This map transfers garage ownership, restricts multiple unit types across all factions, and tracks tank counts for Player 1 and Player 2.
+            </p>
+        `,
+                script: `
+Garage allegiances
+*** IF ***
+    True.
+*** THEN ***
+   Object 'Garage 1' is transferred to the command of Player 'Player_1'
+   Object 'Garage 2' is transferred to the command of Player 'Player_2'
+
+Restrict Allied Structures
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'alliedairfield' is false.
+   Player '<1st Human Player>' allowed to build 'alliedbarracks' is false.
+   Player '<1st Human Player>' allowed to build 'alliednavalyard' is false.
+   Player '<1st Human Player>' allowed to build 'alliedtechstructure' is false.
+
+Restrict Allied Units
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'alliedantiinfantryvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'alliedantistructurevehicle' is false.
+   Player '<1st Human Player>' allowed to build 'alliedantivehiclevehicletech3' is false.
+   Player '<1st Human Player>' allowed to build 'alliedartilleryvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'alliedfuturetank' is false.
+   Player '<1st Human Player>' allowed to build 'alliedantiinfantryvehicle_ground' is false.
+   Player '<1st Human Player>' allowed to build 'alliedantiairvehicletech1' is false.
+
+Restrict Japan Structures
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'japanbarracksegg' is false.
+   Player '<1st Human Player>' allowed to build 'japannavalyardegg' is false.
+   Player '<1st Human Player>' allowed to build 'japantechstructureegg' is false.
+
+Restrict Japan Units
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'japanantiinfantryvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'japanantistructurevehicle' is false.
+   Player '<1st Human Player>' allowed to build 'japanantivehiclevehicletech3' is false.
+   Player '<1st Human Player>' allowed to build 'japanantiairvehicletech1' is false.
+   Player '<1st Human Player>' allowed to build 'japanlighttransportvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'japansentinelvehicle' is false.
+
+Restrict Soviet Structures
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'sovietairfield' is false.
+   Player '<1st Human Player>' allowed to build 'sovietbarracks' is false.
+   Player '<1st Human Player>' allowed to build 'sovietnavalyard' is false.
+   Player '<1st Human Player>' allowed to build 'soviettechstructure' is false.
+   Player '<1st Human Player>' allowed to build 'sovietbasedefenseadvanced' is false.
+
+Restrict Soviet Units
+*** IF ***
+    True.
+*** THEN ***
+   Player '<1st Human Player>' allowed to build 'sovietantiinfantryvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'sovietantistructurevehicle' is false.
+   Player '<1st Human Player>' allowed to build 'sovietantivehiclevehicletech2' is false.
+   Player '<1st Human Player>' allowed to build 'sovietantivehiclevehicletech3' is false.
+   Player '<1st Human Player>' allowed to build 'sovietheavywalkervehicle' is false.
+   Player '<1st Human Player>' allowed to build 'sovietscoutvehicle' is false.
+   Player '<1st Human Player>' allowed to build 'sovietantiairship_ground' is false.
+
+Text - Count Hill
+*** IF ***
+    True.
+*** THEN ***
+  Store the number of 'alliedantivehiclevehicletech1' owned by Player 'Player_2' to 'COUNTER - Hill Tanks'
+
+Text - Add One (You)
+*** IF ***
+     Object '<This Object>' is of type or type list. 'sovietgrindervehicle'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+  *** OR ***
+     Object '<This Object>' is of type or type list. 'alliedantivehiclevehicletech1'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+  *** OR ***
+     Object '<This Object>' is of type or type list. 'japanantivehiclevehicletech1'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+  *** OR ***
+     Object '<This Object>' is of type or type list. 'sovietantivehiclevehicletech1'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+*** THEN ***
+  Add  1  to 'COUNTER - Your Tanks'
+
+Text - Minus One (You)
+*** IF ***
+     Object '<This Object>' is of type or type list. 'alliedantivehiclevehicletech1'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+  *** OR ***
+     Object '<This Object>' is of type or type list. 'japanantivehiclevehicletech1'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+  *** OR ***
+     Object '<This Object>' is of type or type list. 'sovietantivehiclevehicletech1'
+    *AND*  Player 'Player_1' owns Object '<This Object>'.
+*** THEN ***
+  Subtract  1  from 'COUNTER - Your Tanks'
+
+Text - Show Counters
+*** IF ***
+    True.
+*** THEN ***
+  Show 'COUNTER - Your Tanks' with text Localized String: 'SCRIPT:CC08_COUNTER_TANKSYOU'
+  Show 'COUNTER - Hill Tanks' with text Localized String: 'SCRIPT:CC08_COUNTER_TANKSTHEM'
+
+        `
+            },
+
+        ];
+    </script>
+
+    <script>
+        const container = document.getElementById("maps");
+
+        maps.forEach(map => {
+            const el = document.createElement("div");
+            el.className = "map";
+
+            el.innerHTML = `
+        <img src="${map.image}" alt="${map.title}">
+
+        <div>
+            <h2>${map.title}</h2>
+            <div class="meta">${map.meta}</div>
+
+            <div class="description">
+                ${map.summary}
+            </div>
+
+            <button class="toggle-script">Show WorldBuilder Script</button>
+            <pre class="script hidden">${map.script}</pre>
+        </div>
+    `;
+
+            container.appendChild(el);
+        });
+    </script>
+
+    <script>
+        document.addEventListener("click", e => {
+            if (!e.target.classList.contains("toggle-script")) return;
+
+            const script = e.target.nextElementSibling;
+            const hidden = script.classList.toggle("hidden");
+
+            e.target.textContent = hidden
+                ? "Show WorldBuilder Script"
+                : "Hide WorldBuilder Script";
+        });
+    </script>
+
+</body>
+
+</html>
