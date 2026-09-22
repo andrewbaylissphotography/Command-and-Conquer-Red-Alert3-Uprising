@@ -443,13 +443,37 @@ Dogs - D
             {
                 title: "",
                 image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_4_feasel7_art.jpg",
-                meta: "",
+                meta: "map_cc_4_feasel7",
                 summary: `
             <p>
 
             </p>
         `,
-                script: `WorldBuilder script goes here`
+                script: `
+Lockout AI Powers
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+   Player 'Player_2' set maximum power points to  0 .
+   Player 'Player_3' set maximum power points to  1 .
+   Player 'Player_4' set maximum power points to  0 .
+   Player 'Player_5' set maximum power points to  0 .
+   Player 'Player_6' set maximum power points to  0 .
+<hr>
+Reveal Map and Start Taunt Timer
+*** IF ***
+    True.
+*** THEN ***
+  The world is revealed permanently for Player '<All Players>'.
+  Set 'Taunt' to expire in 265.00 seconds.
+<hr>
+Taunt
+*** IF ***
+    Timer 'Taunt' has expired.
+*** THEN ***
+   'CH28GI02' plays in the radar window.
+
+                `
             },
 
             {
@@ -508,7 +532,7 @@ Restrict Allied Structures
     True.
 *** THEN ***
    Player '<1st Human Player>' allowed to build 'alliednavalyard' is false.
-
+<hr>
 Restrict Allied Units
 *** IF ***
     True.
@@ -518,13 +542,13 @@ Restrict Allied Units
    Player '<1st Human Player>' allowed to build 'alliedfighteraircraft' is false.
    Player '<1st Human Player>' allowed to build 'alliedgunshipaircraft' is false.
    Player '<1st Human Player>' allowed to build 'alliedsupportaircraft' is false.
-
+<hr>
 Restrict Japan Structures
 *** IF ***
     True.
 *** THEN ***
    Player '<1st Human Player>' allowed to build 'japannavalyardegg' is false.
-
+<hr>
 Restrict Japan Units
 *** IF ***
     True.
@@ -533,14 +557,14 @@ Restrict Japan Units
    Player '<1st Human Player>' allowed to build 'japanantiairvehicletech1' is false.
    Player '<1st Human Player>' allowed to build 'japanantiinfantryvehicle' is false.
    Player '<1st Human Player>' allowed to build 'japannavalyardegg' is false.
-
+<hr>
 Restrict Soviet Structures
 *** IF ***
     True.
 *** THEN ***
    Player '<1st Human Player>' allowed to build 'sovietairfield' is false.
    Player '<1st Human Player>' allowed to build 'sovietnavalyard' is false.
-
+<hr>
 Allegiances
 *** IF ***
     True.
@@ -549,7 +573,7 @@ Allegiances
    Player 'Player_2' considers Player 'Player_1' to be Relation 'Enemy'
    Player 'Player_2' considers Player 'Player_4' to be Relation 'Neutral'
    Player 'Player_4' considers Player 'Player_2' to be Relation 'Neutral'
-
+<hr>
 Patrols
 *** IF ***
     True.
@@ -560,13 +584,13 @@ Patrols
   Have Team 'Player_2/TEAM - Troopers C' AttackMove along Waypoint Path 'PATH - Troopers C' , as a team is false , in formation is false
   Have Team 'Player_2/TEAM - Troopers D' AttackMove along Waypoint Path 'TEAM - Troopers D' , as a team is false , in formation is false
   Have Team 'Player_2/TEAM - Tesla E' AttackMove along Waypoint Path 'PATH - Patrol E' , as a team is false , in formation is false
-
+<hr>
 Static - Use EMP
 *** IF ***
     True.
 *** THEN ***
    Team 'Player_2/TEAM - Troopers A' use Ability 'Command_ToggleShortCircuit'.
-
+<hr>
 Static - Event
 *** IF ***
      Object '<This Object>' is of type or type list. 'sovietantivehiclevehicletech2'
@@ -574,7 +598,7 @@ Static - Event
      Object '<This Object>' is of type or type list. 'sovietheavyantivehicleinfantry'
 *** THEN ***
    Object '<This Object>' executes a copy of Script 'Static - Attack' sequentially.
-
+<hr>
 Static - Attack
 *** IF ***
      Object '<This Object>' has Object Status is 'USING_ABILITY'
@@ -583,19 +607,19 @@ Static - Attack
    Object '<This Object>' begins hunting.
 *** ELSE ***
    Object '<This Object>' begins hunting.
-
+<hr>
 Tesla Boats - Spawn
 *** IF ***
     True.
 *** THEN ***
   Spawn an instance of Team 'Player_2/TEAM - Tesla Boats' at Waypoint 'WP - Tesla Boat Spawner'.
-
+<hr>
 Tesla Boat - Setup
 *** IF ***
     True.
 *** THEN ***
   Set 'TIMER - Tesla Boats - Start' to expire in 300.00 seconds.
-
+<hr>
 Tesla Boats - Attack
 *** IF ***
     Timer 'TIMER - Tesla Boats - Start' has expired.
@@ -603,14 +627,14 @@ Tesla Boats - Attack
   Move Team '<This Team>' to Waypoint 'WP - Tesla Boat Move'.
   AttackMove Team '<This Team>' to Waypoint 'Player_1_Start'.
    Team '<This Team>' begins hunting.
-
+<hr>
 Tesla Harassment - Setup
 *** IF ***
     True.
 *** THEN ***
    Team 'Player_2/TEAM - Troopers Harassment' use Ability 'Command_ToggleShortCircuit'.
   Sets Team 'Player_2/TEAM - Troopers Harassment' stance to Stance: HOLD_FIRE.
-
+<hr>
 Tesla - Harassment - Reference
 *** IF ***
     True.
@@ -618,7 +642,7 @@ Tesla - Harassment - Reference
   Set Object Reference 'REFERENCE - Harasser' to random member of Team 'Player_2/TEAM - Troopers Harassment'.
   Set Object Reference 'REFERENCE - GoTo' to random member of Team 'PlyrCivilian/TEAM - Harass Widget'.
    Object 'REFERENCE - Harasser' executes a copy of Script 'Tesla - Harassment - Move' sequentially.
-
+<hr>
 Tesla - Harassment - Move
 *** IF ***
     True.
@@ -634,43 +658,129 @@ Tesla - Harassment - Move
             {
                 title: "",
                 image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_4_schafeamon1_ep1_art.jpg",
-                meta: "",
+                meta: "map_cc_4_schafeamon1_ep1",
                 summary: `
             <p>
 
             </p>
         `,
-                script: `WorldBuilder script goes here`
+                script: `
+Transfer pre-placed structures to AI
+*** IF ***
+    True.
+*** THEN ***
+  Turn Skirmish AI for Player 'Player_2' On starting opening moves and timers.
+  Turn Skirmish AI for Player 'Player_3' On starting opening moves and timers.
+  Turn Skirmish AI for Player 'Player_4' On starting opening moves and timers.
+<hr>
+Spawn - Allies
+*** IF ***
+     Player 'Player_1' has Greater Than or Equal To  1  object of type 'alliedconstructionyard'.
+*** THEN ***
+  Spawn Object 'UNIT - Commando' of type 'alliedcommandotech1' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Commando', rotated 135.00 degrees.
+  Spawn unit of type 'oilderrick' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Oil Derrick 01'
+  Spawn unit of type 'oilderrick' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Oil Derrick 02'
+<hr>
+Spawn - Soviets
+*** IF ***
+     Player 'Player_1' has Greater Than or Equal To  1  object of type 'sovietconstructionyard'.
+*** THEN ***
+  Spawn Object 'UNIT - Commando' of type 'sovietcommandotech1' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Commando', rotated 135.00 degrees.
+  Spawn unit of type 'oilderrick' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Oil Derrick 01'
+  Spawn unit of type 'oilderrick' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Oil Derrick 02'
+<hr>
+Spawn - Japan
+*** IF ***
+     Player 'Player_1' has Greater Than or Equal To  1  object of type 'japanconstructionyard'.
+*** THEN ***
+  Spawn Object 'UNIT - Commando' of type 'japancommandotech1' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Spawn Commando', rotated 135.00 degrees.
+  Spawn unit of type 'oilderrick' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Oil Derrick 01'
+  Spawn unit of type 'oilderrick' on Team 'Player_1/teamPlayer_1' at Waypoint 'WP - Oil Derrick 02'
+
+Counter - Show
+*** IF ***
+    True.
+*** THEN ***
+  Show 'COUNTER - Yurikos' with text Localized String: 'SCRIPT:CC24_COUNTER_YURIKOS'
+<hr>
+Counter - Add One
+*** IF ***
+     Player 'Player_2' owns Object '<This Object>'.
+    *AND*  Object '<This Object>' is of type or type list. 'japancommandotech1'
+  *** OR ***
+     Player 'Player_3' owns Object '<This Object>'.
+    *AND*  Object '<This Object>' is of type or type list. 'japancommandotech1'
+  *** OR ***
+     Player 'Player_4' owns Object '<This Object>'.
+    *AND*  Object '<This Object>' is of type or type list. 'japancommandotech1'
+*** THEN ***
+  Add  1  to 'COUNTER - Yurikos'
+<hr>
+Counter - Minus One
+*** IF ***
+     Player 'Player_2' owns Object '<This Object>'.
+    *AND*  Object '<This Object>' is of type or type list. 'japancommandotech1'
+  *** OR ***
+     Player 'Player_3' owns Object '<This Object>'.
+    *AND*  Object '<This Object>' is of type or type list. 'japancommandotech1'
+  *** OR ***
+     Player 'Player_4' owns Object '<This Object>'.
+    *AND*  Object '<This Object>' is of type or type list. 'japancommandotech1'
+*** THEN ***
+  Subtract  1  from 'COUNTER - Yurikos'
+
+                `
             },
 
             {
                 title: "",
                 image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_cc_5_schafeamon1_ep1_art.jpg",
-                meta: "",
+                meta: "map_cc_5_schafeamon1_ep1",
                 summary: `
             <p>
 
             </p>
         `,
-                script: `WorldBuilder script goes here`
+                script: `
+Extra Cash
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+  Set Player 'Player_1''s money to $ 40000 
+
+                `
             },
 
             {
                 title: "",
                 image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel1_ep1_art.jpg",
-                meta: "",
+                meta: "map_mp_2_feasel1_ep1",
                 summary: `
             <p>
 
             </p>
         `,
-                script: `WorldBuilder script goes here`
+                script: `
+Spawn Defenses
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+  Spawn unit of type 'sovietpowerplant' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Power Plant 1'
+  Spawn unit of type 'sovietpowerplant' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Power Plant 2'
+  Spawn unit of type 'sovietbasedefenseground' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Sentry Gun 1'
+  Spawn unit of type 'sovietbasedefenseground' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Sentry Gun 2'
+  Spawn unit of type 'sovietbasedefenseground' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Sentry Gun 3'
+  Spawn unit of type 'sovietbasedefenseground' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Sentry Gun 4'
+  Spawn unit of type 'sovietbarracks' on Team 'Player_2/teamPlayer_2' at Waypoint 'Spawn Barracks'
+  Set Player 'Player_2''s money to $ 15000 
+
+                `
             },
 
             {
                 title: "",
                 image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel2_art.jpg",
-                meta: "",
+                meta: "map_mp_2_feasel2",
                 summary: `
             <p>
 
@@ -685,7 +795,7 @@ Tesla - Harassment - Move
                 meta: "map_mp_2_feasel2_ep1<br>Allies - Hill",
                 summary: `
             <p>
-                This map transfers garage ownership, restricts multiple unit types across all factions, and tracks tank counts for Player 1 and Player 2.
+                This map transfers garage ownership, enforced basic TANK across all factions, and tracks tank counts for Player 1 and Player 2.
             </p>
         `,
                 script: `
@@ -802,6 +912,654 @@ Text - Show Counters
 
         `
             },
+
+            {
+                title: "Are You Experienced",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel3_ep1_art.jpg",
+                meta: "map_mp_2_feasel3_ep1",
+                summary: `
+            <p>
+This map focuses on tech building control and uses scripted rules to shape AI behavior and player awareness. <br>
+In Commander’s Challenge mode, the AI is prevented from attacking all tech buildings, and several are assigned to specific players to ensure proper ownership. <br>
+The script tracks how many tech structures each player owns and displays these counts on-screen via counters. <br>
+Every 13 seconds, radar pings highlight three key tech buildings to keep players aware of their locations. <br>
+The AI is also restricted from capturing certain tech buildings unless it has established a naval presence, at which point one building becomes capturable. <br>
+Overall, the script aims to preserve tech structures, guide player focus, and control AI expansion in a structured way.
+            </p>
+        `,
+                script: `
+Set AI To Not Attack Tech Structures
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+  For Object 'Tech Building 1' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 10' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 11' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 12' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 2' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 3' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 4' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 5' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 6' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 7' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 8' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+  For Object 'Tech Building 9' set Object Status is 'SKIRMISH_AI_DO_NOT_ATTACK' to true.
+   Object 'Tech Building 1' will join Team 'Player_2/teamPlayer_2'.
+   Object 'Tech Building 3' will join Team 'Player_2/teamPlayer_2'.
+   Object 'Tech Building 2' will join Team 'Player_2/teamPlayer_2'.
+   Object 'Tech Building 5' will join Team 'Player_1/teamPlayer_1'.
+   Object 'Tech Building 6' will join Team 'Player_1/teamPlayer_1'.
+   Object 'Tech Building 7' will join Team 'Player_1/teamPlayer_1'.
+<hr>
+Text - Counter Show
+*** IF ***
+    Timer 'TIMER - Text - Show & Ping' has expired.
+*** THEN ***
+  Show 'COUNTER - P1' with text Localized String: 'SCRIPT:CC32_COUNTER_P1'
+  Show 'COUNTER - P2' with text Localized String: 'SCRIPT:CC32_COUNTER_P2'
+<hr>
+Text - Counter Update
+*** IF ***
+    True.
+*** THEN ***
+  Store the number of 'veterancytechstructure' owned by Player 'Player_1' to 'COUNTER - P1'
+  Store the number of 'veterancytechstructure' owned by Player 'Player_2' to 'COUNTER - P2'
+<hr>
+Ping - Tech Structures
+*** IF ***
+    Timer 'TIMER - Text - Show & Ping' has expired.
+*** THEN ***
+  A radar event occurs at Object 'Tech Building 5' of type Information
+  A radar event occurs at Object 'Tech Building 6' of type Information
+  A radar event occurs at Object 'Tech Building 7' of type Information
+<hr>
+Ping - Setup
+*** IF ***
+    True.
+*** THEN ***
+  Set 'TIMER - Text - Show & Ping' to expire in 13.00 seconds.
+<hr>
+Set AI to Not Take Unneccesary Tech
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+*** THEN ***
+  For Object 'Tech Building 4' set Object Status is 'SKIRMISH_AI_DO_NOT_TAKE' to true.
+  For Object 'Tech Building 12' set Object Status is 'SKIRMISH_AI_DO_NOT_TAKE' to true.
+<hr>
+Set AI to Take Dry Dock
+*** IF ***
+    Map is running in Commander's Challenge Mode.
+    *AND*  Player 'Player_2' has Greater Than or Equal To  1  object of type 'alliednavalyard'.
+*** THEN ***
+  For Object 'Tech Building 12' set Object Status is 'SKIRMISH_AI_DO_NOT_TAKE' to false.
+
+                `
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel4_ep1_sk_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel5_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel5_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel6_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "Double-Barreled",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel6_ep1_art.jpg",
+                meta: "map_mp_2_feasel6_ep1<br>Soviets - Oleg",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel7_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "Dirty Tricks",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel8_art.jpg",
+                meta: "Soviets - Moskvin",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel8_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel9_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel10_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel11_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_feasel12_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "Creeping Death",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_2_rao1_art.jpg",
+                meta: "map_mp_2_rao1<br>Empire - Kenji",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_3_feasel1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_3_feasel1_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_3_feasel2_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_3_feasel2_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_3_feasel4_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_black_xslice_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel1_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel2_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel3_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel3_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel4_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel4_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel5_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel5_ep1_sk_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel6_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel6_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel7_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel7_sk_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel8_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel9_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel10_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel11_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel12_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_feasel13_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_ssmith2-remix_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "Crate and Red Barrel",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_4_stewart_1_art.jpg",
+                meta: "map_mp_4_stewart_1<br>Allies - Hill",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_5_feasel1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "Defence of the Archipelago",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_6_feasel1_ep1_art.jpg",
+                meta: "Soviets - Moskvin",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_6_feasel2_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_6_feasel2_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_6_feasel2_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_6_feasel3_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_6_feasel3_ep1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
+            {
+                title: "",
+                image: "https://raw.githubusercontent.com/andrewbaylissphotography/Command-and-Conquer-Red-Alert3-Uprising/refs/heads/main/JPEG/map_mp_promo_feasel1_art.jpg",
+                meta: "",
+                summary: `
+            <p>
+
+            </p>
+        `,
+                script: `WorldBuilder script goes here`
+            },
+
 
         ];
     </script>
